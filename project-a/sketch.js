@@ -6,6 +6,7 @@ function setup() {
     frameRate(7);
 }
 
+//variables
 let pixelsize = 10;
 let secondCount;
 let boatX = 400;
@@ -19,9 +20,8 @@ function draw() {
 
     //let the creature fade away
     if (Second >= 59) {
-        creatureX = creatureX - 20;
-    }
-    else {
+        creatureX = creatureX - 15;
+    } else {
         creatureX = 450;
     }
     creatureY = 250;
@@ -37,9 +37,17 @@ function draw() {
     drawInstruct();
     processing();
     victory();
+    dead();
 }
 
-let sx1, sy1, sx2, sy2, sx3, sy3;
+let sx1, sy1, sx2, sx3, sx4, sy4, sy5, sy6, sy7, sy8, sx9, sy10;
+let sx5 = 150;
+let sy3 = -20;
+let sy2 = 520;
+let sx6 = 150;
+let sx7 = 150;
+let sx8 = 150;
+let sy9 = 520;
 //color of the fireball
 let firered = 255;
 let firegreen = 255;
@@ -50,135 +58,238 @@ let firegreen = 255;
 
 function fire(x, y, cx, cy) {
     Second = Math.floor(frameCount / 7);
-    // fire1 = fire1 + 12;
-    // fire2 = fire2 - 10;
-    // fire3 = fire3 + 5;
+
+    //attack1
     if (Second >= 6 && Second < 61) {
         sx1 = 250 * sin(frameCount * 0.15) + cx - 300;
         sy1 = 250 * cos(frameCount * 0.15) + cy;
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 noStroke();
-                if (Hitbox(x + 20, y + 10, i * pixelsize + sx1, j * pixelsize + sy1, 10) && protection() == false) {
-                    hitCount++;
+                if (Hitbox(x + 20, y + 5, i * pixelsize + sx1, j * pixelsize + sy1, 15) && invincible == false) {
+                    takeDamage();
                 }
+                invincibility();
                 firered = 220 + random(-10, 35);
                 firegreen = 220 + random(-10, 35);
                 fill(firered, firegreen, 0);
-                square(i * pixelsize + sx1, j * pixelsize + sy1, 10)
+                square(i * pixelsize + sx1, j * pixelsize + sy1, 10);
             }
         }
     }
-    if (Second >= 9 && Second < 61) {
-        sx2 = 400 * sin(-frameCount * 0.1) + cx - 300;
-        sy2 = 400 * cos(-frameCount * 0.1) + cy;
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                noStroke();
-                if (Hitbox(x, y, i * pixelsize + sx2, j * pixelsize + sy2, 20)) {
-                    firered = 255;
-                    firegreen = 0;
-                }
-                // else{
-                //   firered = 220+random(-10,35);
-                //   firegreen = 220+random(-10,35);
-                // }
-                fill(firered, firegreen, 0);
-                square(i * pixelsize + sx2, j * pixelsize + sy2, 10)
-            }
+
+    //attack2
+    if (Second >= 12 && Second < 61) {
+        sx2 = 400;
+        if (sy2 <= -40) {
+            sy2 = 540;
         }
-    }
-    if (Second >= 14 && Second < 61) {
-        sx3 = 550 * sin(frameCount * 0.25) + cx - 300;
-        sy3 = 550 * cos(frameCount * 0.25) + cy;
+        else {
+            sy2 = sy2 - 10;
+        }
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 noStroke();
-                if (Hitbox(x + 20, y + 10, i * pixelsize + sx3, j * pixelsize + sy3, 20)) {
-                    firered = 255;
-                    firegreen = 0;
+                if (Hitbox(x + 20, y + 5, i * pixelsize + sx2, j * pixelsize + sy2, 15) && !invincible) {
+                    takeDamage();
                 }
+                invincibility();
                 firered = 220 + random(-10, 35);
                 firegreen = 220 + random(-10, 35);
-
                 fill(firered, firegreen, 0);
-                square(i * pixelsize + sx3, j * pixelsize + sy3, 10)
+                square(i * pixelsize + sx2, j * pixelsize + sy2, 10);
             }
         }
     }
-    //   push();
-    //   translate(cx-300,cy);
-    //   rotate(radians(fire1));
-    //   if(Second>=2){
-    //     for(let i=0;i<3;i++){
-    //       for(let j=0;j<3;j++){
-    //         noStroke();
-    //         if(Hitbox(x,y,10,i*pixelsize-50,j*pixelsize)){
-    //           firered = 255;
-    //           firegreen = 0;
-    //         }
-    //         else{
-    //           firered = 220+random(-10,35);
-    //           firegreen = 220+random(-10,35);
-    //         }
-    //         fill(firered,firegreen,0);
-    //         square(i*pixelsize+250,j*pixelsize,10)
 
-    //       }
+    //attack3
+    if (Second >= 18 && Second < 61) {
+        sx3 = 550
+        if (sy3 > 540) {
+            sy3 = -40;
+        }
+        else {
+            sy3 = sy3 + 20;
+        }
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                noStroke();
+                if (Hitbox(x + 20, y + 5, i * pixelsize + sx3, j * pixelsize + sy3, 15) && !invincible) {
+                    takeDamage();
+                }
+                invincibility();
+                firered = 220 + random(-10, 35);
+                firegreen = 220 + random(-10, 35);
+                fill(firered, firegreen, 0);
+                square(i * pixelsize + sx3, j * pixelsize + sy3, 10);
+            }
+        }
+    }
+
+    //attack4
+    // if (Second >= 24 && Second < 61) {
+    //   sx4 = 100 * sin(frameCount * 0.3) + sx1;
+    //   sy4 = 100 * cos(frameCount * 0.3) + sy1;
+    //   for (let i = 0; i < 2; i++) {
+    //     for (let j = 0; j < 2; j++) {
+    //       noStroke();
+    //       if (Hitbox(x+20, y+5, i * pixelsize + sx4, j * pixelsize + sy4, 15) && !invincible) {
+    //   takeDamage();
+    //   }
+    //       invincibility();
+    //       firered = 190 + random(-30, 35);
+    //       firegreen = 190 + random(-30, 35);
+    //       fill(firered, firegreen, 0);
+    //       square(i * pixelsize + sx4, j * pixelsize + sy4, 10);
     //     }
     //   }
-    //   pop();
-    //   push();
-    //   translate(cx-300,cy);
-    //   rotate(radians(fire2));
-    //   if(Second>=5){
-    //     for(let i=0;i<3;i++){
-    //       for(let j=0;j<3;j++){
-    //         firered = 220+random(-10,35);
-    //         firegreen = 220+random(-10,35);
-    //         noStroke();
-    //         fill(firered,firegreen,0);
-    //         square(i*pixelsize+400,j*pixelsize,10)
-    //       }
-    //     }
-    //   }
-    //   pop();
-    //   push();
-    //   translate(cx-300,cy);
-    //   rotate(radians(fire3));
-    //   if(Second>=10){
-    //     for(let i=0;i<3;i++){
-    //       for(let j=0;j<3;j++){
-    //         firered = 220+random(-10,35);
-    //         firegreen = 220+random(-10,35);
-    //         noStroke();
-    //         fill(firered,firegreen,0);
-    //         square(i*pixelsize+550,j*pixelsize,10)
-    //       }
-    //     }
-    //   }
-    //   pop();
+    // }
+
+    //attack 5
+    if (Second >= 24 && Second < 61) {
+        if (sx5 > 850) {
+            sx5 = 150;
+        }
+        else {
+            sx5 = sx5 + 10;
+        }
+        sy5 = cy;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                noStroke();
+                if (Hitbox(x + 20, y + 5, i * pixelsize + sx5, j * pixelsize + sy5, 15) && !invincible) {
+                    takeDamage();
+                }
+                invincibility();
+                firered = 220 + random(-10, 35);
+                firegreen = 220 + random(-10, 35);
+                fill(firered, firegreen, 0);
+                square(i * pixelsize + sx5, j * pixelsize + sy5, 10);
+            }
+        }
+    }
+
+    //attack6
+    if (Second >= 30 && Second < 61) {
+        if (sx6 > 850) {
+            sx6 = 150;
+        }
+        else {
+            sx6 = sx6 + 20;
+        }
+        sy6 = cy + 150;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                noStroke();
+                if (Hitbox(x + 20, y + 5, i * pixelsize + sx6, j * pixelsize + sy6, 15) && !invincible) {
+                    takeDamage();
+                }
+                invincibility();
+                firered = 220 + random(-10, 35);
+                firegreen = 220 + random(-10, 35);
+                fill(firered, firegreen, 0);
+                square(i * pixelsize + sx6, j * pixelsize + sy6, 10);
+            }
+        }
+    }
+
+    //attack7
+    if (Second >= 36 && Second < 61) {
+        if (sx7 > 850) {
+            sx7 = 150;
+        }
+        else {
+            sx7 = sx7 + 20;
+        }
+        sy5 = cy - 150;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                noStroke();
+                if (Hitbox(x + 20, y + 5, i * pixelsize + sx7, j * pixelsize + sy7, 15) && !invincible) {
+                    takeDamage();
+                }
+                invincibility();
+                firered = 220 + random(-10, 35);
+                firegreen = 220 + random(-10, 35);
+                fill(firered, firegreen, 0);
+                square(i * pixelsize + sx7, j * pixelsize + sy7, 10);
+            }
+        }
+    }
+
+    //attack8
+    if (Second >= 42 && Second < 61) {
+        if (sx5 > 850) {
+            sx8 = 150;
+        }
+        else {
+            sx8 = sx8 + 30;
+        }
+        sy8 = cy;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                noStroke();
+                if (Hitbox(x + 20, y + 5, i * pixelsize + sx8, j * pixelsize + sy8, 15) && !invincible) {
+                    takeDamage();
+                }
+                invincibility();
+                firered = 220 + random(-10, 35);
+                firegreen = 220 + random(-10, 35);
+                fill(firered, firegreen, 0);
+                square(i * pixelsize + sx8, j * pixelsize + sy8, 10);
+            }
+        }
+    }
+
+    //attack9
+    if (Second >= 48 && Second < 61) {
+        sx9 = 700
+        if (sy9 < -40) {
+            sy9 = 540;
+        }
+        else {
+            sy9 = sy9 - 40;
+        }
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                noStroke();
+                if (Hitbox(x + 20, y + 5, i * pixelsize + sx9, j * pixelsize + sy9, 15) && !invincible) {
+                    takeDamage();
+                }
+                invincibility();
+                firered = 220 + random(-10, 35);
+                firegreen = 220 + random(-10, 35);
+                fill(firered, firegreen, 0);
+                square(i * pixelsize + sx9, j * pixelsize + sy9, 10);
+            }
+        }
+    }
 }
 
-let pCount = 0;
-let prostatus = false;
+let invincible = false;
+let invincibleTimer = 0;
+
+function invincibility() {
+    if (invincible) {
+        invincibleTimer--;
+        if (invincibleTimer <= 0) {
+            invincible = false;
+            boatgreen = 220;
+            boatblue = 220;
+        }
+    }
+}
+
 function Hitbox(x, y, px, py, r) {
-    if (dist(x, y, px, py) < r) {
-        prostatus = true
-        return true;
-    }
+    return dist(x, y, px, py) < r;
 }
 
-function protection() {
-    if (prostatus == true && pCount <= 10) {
-        pCount = pCount + frameCount;
-        return true;
-    }
-    if (pCount > 10) {
-        pCount = 0;
-        prostatus = false;
-        return false;
-    }
+function takeDamage() {
+    invincibleTimer = 25;
+    boatgreen = 0;
+    boatblue = 0;
+    hitCount++;
+    invincible = true;
 }
 
 function HP() {
@@ -186,12 +297,10 @@ function HP() {
         drawHeart(730, 10);
         drawHeart(650, 10);
         drawHeart(570, 10);
-    }
-    else if (hitCount == 1) {
+    } else if (hitCount == 1) {
         drawHeart(730, 10);
         drawHeart(650, 10);
-    }
-    else if (hitCount == 2) {
+    } else if (hitCount == 2) {
         drawHeart(730, 10);
     }
 }
@@ -204,7 +313,7 @@ function drawHeart(heartX, heartY) {
             if (
                 (y == 0 && (x == 1 || x == 2 || x == 4 || x == 5)) ||
                 (y == 1 && x != 0 && x != 6) ||
-                (y == 2) ||
+                y == 2 ||
                 (y == 3 && x != 0 && x != 6) ||
                 (y == 4 && x >= 1 && x <= 5) ||
                 (y == 5 && x >= 2 && x <= 4)
@@ -216,12 +325,14 @@ function drawHeart(heartX, heartY) {
     }
 }
 
-
+let boatred = 220;
+let boatgreen = 220;
+let boatblue = 220;
 function boat() {
     //WASD to control the boat
     push();
-    translate(boatX, boatY)
-    fill(220);
+    translate(boatX, boatY);
+    fill(boatred, boatgreen, boatblue);
     beginShape();
     vertex(0, 0);
     vertex(40, 0);
@@ -232,14 +343,14 @@ function boat() {
     fill(0);
     square(20, 5, 10);
     if (key == "w" || key == "W") {
-        boatY = constrain(boatY - 15, 0, 480);
+        boatY = constrain(boatY - 20, 0, 480);
         // boatX = constrain(boatX + 3,300,700);
     }
     if (key == "a" || key == "A") {
         boatX = constrain(boatX - 20, 300, 700);
     }
     if (key == "s" || key == "S") {
-        boatY = constrain(boatY + 15, 0, 480);
+        boatY = constrain(boatY + 20, 0, 480);
         // boatX = constrain(boatX + 3,300,700);
     }
     if (key == "d" || key == "D") {
@@ -302,9 +413,8 @@ function drawEyeInner(x, y) {
 
     //change mode after 40s
     if (Second > 40) {
-        fill("red")
-    }
-    else {
+        fill("red");
+    } else {
         fill(148, 0, 211);
     }
     rect(-1 * pixelsize + 10, -5 * pixelsize, 2 * pixelsize, 10 * pixelsize);
@@ -339,7 +449,7 @@ function drawEyeOuter(x, y) {
 function drawBody(x, y) {
     let orangeRed, orangeGreen;
     push();
-    translate(x, y)
+    translate(x, y);
     // fill(255,69,0);//orange
     for (let i = -6; i < 6; i++) {
         for (let j = -6; j < 6; j++) {
@@ -400,13 +510,13 @@ function drawBody(x, y) {
 }
 
 function drawTentacle(x, y, offset) {
-    let angle = 20
+    let angle = 20;
     push();
     translate(x + 5, y);
     rotate(radians(angle) * (sin(frameCount * 0.5 + offset * 0.3) + 0.5));
     for (let i = 0; i < 3; i++) {
         noStroke();
-        fill(220 + random(-10, 20), 192 + random(-10, 10), 203 + random(-10, 40));//pink
+        fill(220 + random(-10, 20), 192 + random(-10, 10), 203 + random(-10, 40)); //pink
         square(i * pixelsize, y, pixelsize);
     }
     for (let i = 0; i < 4; i++) {
@@ -422,7 +532,7 @@ function drawTentacle(x, y, offset) {
     for (let i = 0; i < 4; i++) {
         noStroke();
         fill(220 + random(-10, 20), 192 + random(-10, 10), 203 + random(-10, 40));
-        square((i) * pixelsize, y + 30, pixelsize);
+        square(i * pixelsize, y + 30, pixelsize);
     }
     for (let i = 0; i < 3; i++) {
         noStroke();
@@ -432,7 +542,7 @@ function drawTentacle(x, y, offset) {
     for (let i = 0; i < 3; i++) {
         noStroke();
         fill(220 + random(-10, 20), 192 + random(-10, 10), 203 + random(-10, 40));
-        square((i) * pixelsize, y + 50, pixelsize);
+        square(i * pixelsize, y + 50, pixelsize);
     }
     for (let i = 0; i < 3; i++) {
         noStroke();
@@ -520,9 +630,13 @@ function drawInstruct() {
     if (Second <= 4) {
         fill(0);
         textAlign(CENTER);
-        textSize(26);
-        // textFont("Arcade Classic");
-        text("USE WASD TO CONTROL THE SHIP(don't keep pressing keyboard)", 400, 200);
+        textSize(50);
+        textFont("Micro 5");
+        text(
+            "USE WASD TO CONTROL THE SHIP",
+            400,
+            200
+        );
         text("ESCAPE FROM THE ENERGY BALLS", 400, 300);
     }
 }
@@ -562,9 +676,26 @@ function sand() {
 
 function victory() {
     if (Second > 61) {
+        fill("yellow");
         textAlign(CENTER);
-        textSize(40);
-        fill("yellow")
+        textSize(50);
+        textFont("Micro 5");
         text("Successfully Esacped!", 400, 250);
+    }
+}
+
+let deadCount = 0
+function dead() {
+    if (hitCount >= 3) {
+        deadCount = deadCount + 1;
+    }
+    if (deadCount >= 7) {
+        fill(0);
+        rect(0, 0, 800);
+        fill('red');
+        textAlign(CENTER);
+        textSize(60);
+        textFont("Micro 5");
+        text("GAME OVER", 400, 250);
     }
 }

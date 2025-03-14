@@ -97,3 +97,17 @@ canvas {
     margin: auto;
     width: 800px;
 }
+
+.jersey-10-regular {
+    font-family: "Jersey 10", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+ .micro-5-regular {
+    font-family: "Micro 5", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+ }
+  
+  
