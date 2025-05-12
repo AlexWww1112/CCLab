@@ -11,7 +11,6 @@ let worldSpeed = 0.5;
 
 let screenX = 0;
 let screenY = 0;
-// let navigationSpeed = 4;
 
 let polygons = [];
 let circles = [];
@@ -142,8 +141,8 @@ class POLYGON{
     this.speedx = random(-6,6) * worldSpeed;
     this.speedy = random(-6,6) * worldSpeed;
 
-    this.originalSpeedX = this.speedx; // Store the original horizontal speed
-    this.originalSpeedY = this.speedy; // Store the original vertical speed
+    this.originalSpeedX = this.speedx; 
+    this.originalSpeedY = this.speedy; 
 
     this.surviveTime = random(45,60);
     //to identify whether this object is being eaten or not
@@ -157,7 +156,7 @@ class POLYGON{
     let inRiver = false;
     let inForest = false;
   
-    // Check if inside a river
+    // Check river
     for (let river of rivers) {
       if (river.contains(this.x, this.y)) {
         inRiver = true;
@@ -165,7 +164,7 @@ class POLYGON{
       }
     }
   
-    // Check if colliding with a mountain
+    // Check mountain
     for (let mountain of mountains) {
       if (mountain.contains(this.x, this.y)) {
         this.speedx = -this.speedx;
@@ -173,7 +172,7 @@ class POLYGON{
       }
     }
   
-    // Check if inside a forest
+    // Check forest
     for (let forest of forests) {
       if (forest.contains(this.x, this.y)) {
         inForest = true;
@@ -184,7 +183,6 @@ class POLYGON{
     // use noise to control the angle
     let angle = noise(this.noiseOffset) * TWO_PI;
     let speedAdjusted = sqrt(this.originalSpeedX * this.originalSpeedX + this.originalSpeedY * this.originalSpeedY);
-    // Update speeds based on noise angle
     this.speedx = cos(angle) * speedAdjusted;
     this.speedy = sin(angle) * speedAdjusted;
     this.noiseOffset += 0.01;
@@ -192,11 +190,11 @@ class POLYGON{
   
     // Adjust speed and growth based on environment
     if (inRiver) {
-      // Slow down, but not less than 0.5*original speed
+      // Slow down
       this.speedx = constrain(this.originalSpeedX * 0.5, this.originalSpeedX * 0.5, this.originalSpeedX);
       this.speedy = constrain(this.originalSpeedY * 0.5, this.originalSpeedY * 0.5, this.originalSpeedY);
     } else if (inForest) {
-      // Speed up, but not more than 2*original speed
+      // Speed up
       this.speedx = constrain(this.originalSpeedX * 2, this.originalSpeedX, this.originalSpeedX * 2);
       this.speedy = constrain(this.originalSpeedY * 2, this.originalSpeedY, this.originalSpeedY * 2);
       this.scaleFactor += 0.004; // Grow faster in forest
@@ -307,7 +305,6 @@ class CIRCLE {
     let inForest = false;
     let inMountain = false;
   
-    // Try to go around or turn back before hitting the mountain
     for (let mountain of mountains) {
       if (mountain.contains(this.x, this.y)) {
         inMountain = true;
@@ -321,7 +318,7 @@ class CIRCLE {
       this.speedy = (this.speedy / currentSpeed) * mountainSpeed;
     }
   
-    // Move very slow in forest (but not less than 0.5*original speed)
+    // Move very slow in forest 
     for (let forest of forests) {
       if (forest.contains(this.x, this.y)) {
         inForest = true;
@@ -335,7 +332,7 @@ class CIRCLE {
       this.speedy = (this.speedy / currentSpeed) * forestSpeed;
     }
   
-    // Escape when square is near, speed up (no more than 2x original), reduce lifetime
+    // Escape when square is near, speed up, reduce lifetime
     let nearestSquare = null;
     let minDist = Infinity;
     for (let sqr of squares) {
@@ -712,15 +709,13 @@ class TRIANGLE {
     this.speedy = random(-5, 5) * worldSpeed;
     this.originalSpeed = sqrt(this.speedx * this.speedx + this.speedy * this.speedy);
     this.surviveTime = random(150,200);
-    this.restTimer = 0; // Frames to pause after eating
+    this.restTimer = 0; 
   }
   
   update() {
-    // Decrease life; if resting after eating, do not move.
     this.surviveTime -= 2 * worldSpeed * (1 / 30);
     if (this.restTimer > 0) {
       this.restTimer--;
-      // After rest, reset speed to original magnitude (keeping current direction)
       let angle = atan2(this.speedy, this.speedx);
       this.speedx = cos(angle) * this.originalSpeed;
       this.speedy = sin(angle) * this.originalSpeed;
@@ -748,7 +743,7 @@ class TRIANGLE {
       }
     }
   
-    // Detect if there is a nearby square (chase range = 350)
+    // Detect if there is a nearby square
     let chasing = false;
     let minDist = Infinity, nearestSquare = null;
     for (let sqr of squares) {
@@ -763,7 +758,6 @@ class TRIANGLE {
     }
   
     if (chasing && nearestSquare) {
-      // Simple chase: move toward the nearest square at 1.5×originalSpeed.
       let dx = nearestSquare.x - this.x;
       let dy = nearestSquare.y - this.y;
       let len = sqrt(dx * dx + dy * dy) || 1;
@@ -809,7 +803,6 @@ class TRIANGLE {
     }
   }
   
-  // The chase() function remains unchanged
   chase() {
     let nearest = null;
     let minDist = Infinity;
@@ -840,9 +833,9 @@ class TRIANGLE {
     }
   }
   
-  // Call this method to pause the triangle after it eats something.
+  // Call this function to stop the triangle after it eats something.
   restAfterEat() {
-    this.restTimer = 80; // e.g., 60 frames (1 second at 60 fps)
+    this.restTimer = 80; //frames
   }
   
   display() {
@@ -996,7 +989,7 @@ class Mountain {
   constructor(centerX, centerY, size) {
     this.x = centerX;
     this.y = centerY;
-    this.size = size; // Size of the triangle
+    this.size = size; 
   }
 
   display() {
@@ -1015,8 +1008,6 @@ class Mountain {
   }
 
   contains(x, y) {
-    // Check if a point (x, y) is inside the triangle
-    // Approximation: Check if the point is within the bounding box of the triangle
     return (
       x > this.x - this.size / 2 &&
       x < this.x + this.size / 2 &&
@@ -1032,35 +1023,33 @@ class Forest {
     this.x = centerX;
     this.y = centerY;
     this.size = size;
-    this.numTrees = numTrees; // 可用于后续扩展
+    this.numTrees = numTrees;
   }
   
   display() {
     push();
     translate(this.x, this.y);
-    // 统一视觉风格设置
     drawingContext.shadowBlur = 30;
     drawingContext.shadowColor = color("darkgreen");
     stroke("darkgreen");
     strokeWeight(3);
     
-    // 绘制树形图案：首先绘制树干
+    // body
     push();
     rectMode(CENTER);
     noStroke();
     fill("saddlebrown");
-    // 树干高度与宽度根据 size 调整
     rect(0, this.size * 0.25, this.size * 0.15, this.size * 0.4);
     pop();
     
-    // 绘制树冠（使用三角形表示）
+    // leaf
     push();
     fill("forestgreen");
     stroke("darkgreen");
     beginShape();
-      vertex(0, -this.size * 0.3);                 // 顶部
-      vertex(-this.size * 0.5, this.size * 0.2);     // 左下角
-      vertex(this.size * 0.5, this.size * 0.2);      // 右下角
+      vertex(0, -this.size * 0.3);                 // top
+      vertex(-this.size * 0.5, this.size * 0.2);     // left bottom
+      vertex(this.size * 0.5, this.size * 0.2);      // right bottom
     endShape(CLOSE);
     pop();
     
@@ -1081,7 +1070,7 @@ let rivers = [];
 let mountains = [];
 let forests = [];
 let drawMode = false;
-let environmentMode = "none"; // Modes: "river", "mountain", "none"
+let environmentMode = "none"; //begining statement
 
 function manageEnvironment() {
   // Draw rivers continuously when in "river" mode
@@ -1110,9 +1099,8 @@ function manageEnvironment() {
   }
 }
 
-// Add this inside your existing mouseDragged() function at the top
+// For draw and scale
 function mouseDragged() {
-  // Check if the mouse is over the scale bar area.
   let barWidth = 300;
   let barHeight = 20;
   let barX = (width - barWidth) / 2;
@@ -1123,7 +1111,6 @@ function mouseDragged() {
     // Map mouseX to the scale range.
     scaletimes = map(mouseX, barX, barX + barWidth, 0.15, 1.0);
   } else {
-    // Determine the current scale applied to the world (same as in draw())
     let currentScale = map(scaletimes, 0, 1, 0.15, 1);
     // Convert screen mouse coordinates to world coordinates.
     let worldMouseX = ((mouseX - screenX*currentScale) - width/2) / currentScale + width/2;
@@ -1168,7 +1155,7 @@ function drawWorldBoundey() {
 
 function drawUI() {
   push();
-  resetMatrix(); // Remove any camera transforms
+  resetMatrix(); 
   
   let borderThickness = 50;
   
@@ -1189,21 +1176,18 @@ function drawUI() {
 
 function drawScaleBar() {
   push();
-  resetMatrix(); // Remove camera transforms
+  resetMatrix(); 
   
-  // Define bar dimensions and position so that it's centered at the bottom.
   let barWidth = 300;
   let barHeight = 20;
   let barX = (width - barWidth) / 2;
-  let barY = height - 40; // 70 px from the bottom (adjust as needed)
+  let barY = height - 40; 
   
   // Draw the bar background.
   fill(220);
   stroke(0);
   rect(barX, barY, barWidth, barHeight, 5);
   
-  // Map the current scale (scaletimes) to a slider handle position.
-  // Adjust minScale and maxScale to whatever range you desire.
   let minScale = 0.15;
   let maxScale = 1.0;
   let sliderX = map(scaletimes, minScale, maxScale, barX, barX + barWidth);
@@ -1222,7 +1206,6 @@ function drawStartButton() {
   resetMatrix();
   let startButtonWidth = 100;
   let startButtonHeight = 40;
-  // 在每次绘制时根据当前的canvas高度动态计算位置
   let startButtonX = 35;
   let startButtonY = height - 50 - startButtonHeight - 10;
   fill(50, 150, 50);
@@ -1238,15 +1221,14 @@ function drawStartButton() {
 
 function drawEnvironmentButtons() {
   push();
-  resetMatrix(); // 使用屏幕坐标绘制UI
+  resetMatrix(); 
   let buttonWidth = 100;
   let buttonHeight = 40;
   let gap = 30;
-  // 右侧边框内，离右边留一定间距（例如10像素），从上边开始排列
   let startX = width - buttonWidth - 35;
-  let startY = 100; // 可根据需要调整
+  let startY = 100; 
 
-  // River 按钮
+  // River 
   fill(200);
   stroke(0);
   strokeWeight(1);
@@ -1256,7 +1238,7 @@ function drawEnvironmentButtons() {
   textAlign(CENTER, CENTER);
   text("RIVER", startX + buttonWidth / 2, startY + buttonHeight / 2);
 
-  // Mountain 按钮
+  // Mountain 
   let mountainY = startY + buttonHeight + gap;
   fill(200);
   stroke(0);
@@ -1264,7 +1246,7 @@ function drawEnvironmentButtons() {
   fill(0);
   text("MOUNTAIN", startX + buttonWidth / 2, mountainY + buttonHeight / 2);
 
-  // Forest 按钮
+  // Forest 
   let forestY = mountainY + buttonHeight + gap;
   fill(200);
   stroke(0);
@@ -1272,7 +1254,7 @@ function drawEnvironmentButtons() {
   fill(0);
   text("FOREST", startX + buttonWidth / 2, forestY + buttonHeight / 2);
 
-  // STOP 按钮
+  // STOP 
   let stopY = forestY + buttonHeight + gap;
   fill(200);
   stroke(0);
@@ -1416,23 +1398,20 @@ function mousePressed() {
   }
 }
 
-// 在左侧绘制计数器及“+”“-”按钮
+// button to +, - pattern nums
 function drawPatternCounters() {
   push();
-  resetMatrix(); // Use screen coordinates for UI drawing
+  resetMatrix();
 
-  // Set a unified font for all button labels and counter text.
   textFont("Arial");
   textSize(14);
 
-  // Basic settings (smaller counter box)
   let baseX = 10;
   let baseY = 100;         // Top position for the first counter box
   let containerWidth = 140;
   let containerHeight = 40;
   let buttonWidth = 30, buttonHeight = 20;
-  let gapY = 70;           // Total slot height for each counter (box + button gap)
-  // Compute the vertical offset for buttons (centered in the gap below the container)
+  let gapY = 70;     
   let gapBelow = gapY - containerHeight;
   let buttonYOffset = gapBelow / 2 - buttonHeight / 2;
 
@@ -1516,42 +1495,38 @@ function drawPatternCounters() {
   pop();
 }
 
-// 新的诡异笑脸按钮，放置于 frame 右下方，与 start button 平行
+// button for stage2
 function drawEvilButton() {
   push();
-  resetMatrix();  // 使用屏幕坐标绘制 UI
+  resetMatrix();  
   
-  // 使用与 start button 相同的尺寸和底边对齐
   let btnWidth = 100;
   let btnHeight = 40;
-  let marginX = 35;  // 与右边框的间距
-  // 与 start button 保持同一垂直位置
+  let marginX = 35;  // gap between right hand side
   let btnX = width - btnWidth - marginX;
   let btnY = height - 50 - btnHeight - 10;
   
-  // 绘制按钮背景
   fill(200);
   stroke(0);
   strokeWeight(2);
   rect(btnX, btnY, btnWidth, btnHeight, 5);
   
-  // 在按钮内部绘制带有白色光环的“诡异笑脸”
+  // strange smile face
   push();
-    // 将坐标原点移动到按钮中心
     translate(btnX + btnWidth / 2, btnY + btnHeight / 2);
     
-    // 绘制白色光环
+    // halo
     noFill();
     stroke(255);
     strokeWeight(4);
     ellipse(0, 0, btnWidth * 1.1, btnHeight * 1.1);
     
-    // 绘制脸部（深黑色圆形）
+    // face
     noStroke();
     fill(0);
     ellipse(0, 0, btnWidth * 0.7, btnHeight * 0.7);
     
-    // 绘制眼睛（白色眼球与红色瞳孔）
+    // eye
     fill(255);
     ellipse(-btnWidth * 0.12, -btnHeight * 0.1, btnWidth * 0.15, btnWidth * 0.15);
     ellipse(btnWidth * 0.12, -btnHeight * 0.1, btnWidth * 0.15, btnWidth * 0.15);
@@ -1559,7 +1534,7 @@ function drawEvilButton() {
     ellipse(-btnWidth * 0.12, -btnHeight * 0.1, btnWidth * 0.07, btnWidth * 0.07);
     ellipse(btnWidth * 0.12, -btnHeight * 0.1, btnWidth * 0.07, btnWidth * 0.07);
     
-    // 绘制嘴巴（白色弧形）
+    // mouth
     noFill();
     stroke(255);
     strokeWeight(2);
