@@ -197,12 +197,12 @@ class POLYGON{
       // Speed up
       this.speedx = constrain(this.originalSpeedX * 2.5, this.originalSpeedX, this.originalSpeedX * 2.5);
       this.speedy = constrain(this.originalSpeedY * 2.5, this.originalSpeedY, this.originalSpeedY * 2.5);
-      this.scaleFactor += 0.004; // Grow faster in forest
+      this.scaleFactor += 0.006; // Grow faster in forest
     } else {
       // Normal speed and growth
       this.speedx = this.originalSpeedX;
       this.speedy = this.originalSpeedY;
-      this.scaleFactor += 0.002;
+      this.scaleFactor += 0.004;
     }
   
     // Update position
