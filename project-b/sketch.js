@@ -191,12 +191,12 @@ class POLYGON{
     // Adjust speed and growth based on environment
     if (inRiver) {
       // Slow down
-      this.speedx = constrain(this.originalSpeedX * 0.5, this.originalSpeedX * 0.5, this.originalSpeedX);
-      this.speedy = constrain(this.originalSpeedY * 0.5, this.originalSpeedY * 0.5, this.originalSpeedY);
+      this.speedx = constrain(this.originalSpeedX * 0.2, this.originalSpeedX * 0.2, this.originalSpeedX);
+      this.speedy = constrain(this.originalSpeedY * 0.2, this.originalSpeedY * 0.2, this.originalSpeedY);
     } else if (inForest) {
       // Speed up
-      this.speedx = constrain(this.originalSpeedX * 2, this.originalSpeedX, this.originalSpeedX * 2);
-      this.speedy = constrain(this.originalSpeedY * 2, this.originalSpeedY, this.originalSpeedY * 2);
+      this.speedx = constrain(this.originalSpeedX * 2.5, this.originalSpeedX, this.originalSpeedX * 2.5);
+      this.speedy = constrain(this.originalSpeedY * 2.5, this.originalSpeedY, this.originalSpeedY * 2.5);
       this.scaleFactor += 0.004; // Grow faster in forest
     } else {
       // Normal speed and growth
@@ -312,7 +312,7 @@ class CIRCLE {
       }
     }
     if (inMountain) {
-      let mountainSpeed = min(0.2 * this.originalSpeed, abs(this.originalSpeed));
+      let mountainSpeed = min(0.1 * this.originalSpeed, abs(this.originalSpeed));
       let currentSpeed = sqrt(this.speedx * this.speedx + this.speedy * this.speedy) || 1;
       this.speedx = (this.speedx / currentSpeed) * mountainSpeed;
       this.speedy = (this.speedy / currentSpeed) * mountainSpeed;
@@ -326,7 +326,7 @@ class CIRCLE {
       }
     }
     if (inForest) {
-      let forestSpeed = min(0.5 * this.originalSpeed, abs(this.originalSpeed));
+      let forestSpeed = min(0.2 * this.originalSpeed, abs(this.originalSpeed));
       let currentSpeed = sqrt(this.speedx * this.speedx + this.speedy * this.speedy) || 1;
       this.speedx = (this.speedx / currentSpeed) * forestSpeed;
       this.speedy = (this.speedy / currentSpeed) * forestSpeed;
@@ -572,8 +572,8 @@ class SQUARE {
       this.speedx = (this.speedx / currentSpeed) * mountainSpeed;
       this.speedy = (this.speedy / currentSpeed) * mountainSpeed;
     } else if (inForest) {
-      let forestSpeedX = 0.7 * this.originalSpeedX;
-      let forestSpeedY = 0.7 * this.originalSpeedY;
+      let forestSpeedX = 0.5 * this.originalSpeedX;
+      let forestSpeedY = 0.5 * this.originalSpeedY;
       let currentSpeed = sqrt(this.speedx * this.speedx + this.speedy * this.speedy) || 1;
       let forestSpeed = sqrt(forestSpeedX * forestSpeedX + forestSpeedY * forestSpeedY);
       this.speedx = (this.speedx / currentSpeed) * forestSpeed;
@@ -773,12 +773,12 @@ class TRIANGLE {
         this.speedx = (this.speedx / curr) * targetSpeed;
         this.speedy = (this.speedy / curr) * targetSpeed;
       } else if (inForest) {
-        let targetSpeed = 0.6 * this.originalSpeed;
+        let targetSpeed = 0.3 * this.originalSpeed;
         let curr = sqrt(this.speedx * this.speedx + this.speedy * this.speedy) || 1;
         this.speedx = (this.speedx / curr) * targetSpeed;
         this.speedy = (this.speedy / curr) * targetSpeed;
       } else if (inMountain) {
-        let targetSpeed = 0.3 * this.originalSpeed;
+        let targetSpeed = 0.1 * this.originalSpeed;
         let curr = sqrt(this.speedx * this.speedx + this.speedy * this.speedy) || 1;
         this.speedx = (this.speedx / curr) * targetSpeed;
         this.speedy = (this.speedy / curr) * targetSpeed;
